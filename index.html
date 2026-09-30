@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>XCPC VP 打卡台 · quchen</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>">
+<style>
+:root{
+  --bg:#0f1216; --bg2:#161b22; --bg3:#1c232c; --line:#2b3543;
+  --fg:#e6edf3; --fg2:#9aa7b4; --fg3:#6b7a8c;
+  --accent:#3b82f6; --accent2:#1d4ed8;
+  --ok:#22c55e; --okbg:rgba(34,197,94,.14);
+  --warn:#f59e0b; --warnbg:rgba(245,158,11,.14);
+  --info:#38bdf8;
+  --radius:10px;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f6f8fa; --bg2:#ffffff; --bg3:#eef1f5; --line:#d8dee4;
+    --fg:#1f2328; --fg2:#57606a; --fg3:#8c959f;
+    --okbg:rgba(34,197,94,.16); --warnbg:rgba(245,158,11,.18);
+    --shadow:0 1px 3px rgba(31,35,40,.12);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--fg);
+  font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 14px 60px}
+
+/* ---------- 顶栏 ---------- */
+header.top{
+  position:sticky;top:0;z-index:50;background:var(--bg2);
+  border-bottom:1px solid var(--line);box-shadow:var(--shadow);
+}
+.top .wrap{padding-top:12px;padding-bottom:12px}
+.top-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.brand{font-size:16px;font-weight:700;letter-spacing:.3px;margin:0}
+.brand small{font-weight:400;color:var(--fg2);margin-left:8px;font-size:12px}
+.spacer{flex:1 1 auto}
+.stat{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--fg2);white-space:nowrap}
+.stat b{color:var(--fg);font-size:14px;font-variant-numeric:tabular-nums}
+.stat .dot{width:8px;height:8px;border-radius:50%;background:var(--fg3)}
+.stat .dot.ok{background:var(--ok)} .stat .dot.warn{background:var(--warn)} .stat .dot.acc{background:var(--accent)}
+
+.bar{height:8px;background:var(--bg3);border-radius:99px;overflow:hidden;flex:1 1 160px;min-width:120px;border:1px solid var(--line)}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--ok));width:0;transition:width .3s ease}
+
+/* ---------- 工具条 ---------- */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px;align-items:center}
+.toolbar input[type=search],.toolbar select{
+  background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;outline:none;
+}
+.toolbar input[type=search]{flex:1 1 190px;min-width:150px}
+.toolbar input[type=search]:focus,.toolbar select:focus{border-color:var(--accent)}
+.btn{
+  background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:7px 11px;
+  font-size:13px;transition:.15s;white-space:nowrap;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.mini{padding:5px 9px;font-size:12px}
+.hint{color:var(--fg3);font-size:12px;margin:8px 2px 0}
+
+/* ---------- 赛站卡片 ---------- */
+.list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.card{
+  background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.card.done{border-color:rgba(34,197,94,.5)}
+.card > .hd{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:11px 13px;cursor:pointer;user-select:none}
+.card > .hd:hover{background:var(--bg3)}
+.card .caret{color:var(--fg3);transition:transform .2s;font-size:11px;width:10px}
+.card.open .caret{transform:rotate(90deg)}
+.title{font-weight:600;font-size:14.5px}
+.title .en{color:var(--fg2);font-weight:400;font-size:12.5px;margin-left:5px}
+.tag{font-size:11px;padding:1.5px 7px;border-radius:99px;border:1px solid var(--line);color:var(--fg2);white-space:nowrap}
+.tag.ccpc{color:#f59e0b;border-color:rgba(245,158,11,.45)}
+.tag.icpc{color:#38bdf8;border-color:rgba(56,189,248,.45)}
+.tag.cat{color:var(--fg3)}
+.tag.has{color:var(--ok);border-color:rgba(34,197,94,.45)}
+.mini-bar{width:74px;height:6px;background:var(--bg3);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.mini-bar>i{display:block;height:100%;background:var(--ok);width:0}
+.count{font-size:12px;color:var(--fg2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.links{display:flex;gap:6px;flex-wrap:wrap}
+.links a{
+  font-size:11.5px;padding:2px 8px;border:1px solid var(--line);border-radius:6px;
+  color:var(--fg2);background:var(--bg3);
+}
+.links a:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+.links a.qoj{color:#c084fc;border-color:rgba(192,132,252,.35)}
+.links a.cf{color:#60a5fa;border-color:rgba(96,165,250,.35)}
+.links a.vj{color:#4ade80;border-color:rgba(74,222,128,.35)}
+
+/* VP 大勾 */
+.vp{
+  display:flex;align-items:center;gap:6px;font-size:12.5px;padding:5px 10px;border-radius:8px;
+  border:1px solid var(--line);background:var(--bg3);white-space:nowrap;margin-left:auto;
+}
+.vp:hover{border-color:var(--ok)}
+.vp .box{
+  width:15px;height:15px;border-radius:4px;border:1.5px solid var(--fg3);display:grid;place-items:center;
+  font-size:11px;line-height:1;color:transparent;flex:0 0 auto;
+}
+.vp.on{border-color:var(--ok);background:var(--okbg);color:var(--ok)}
+.vp.on .box{background:var(--ok);border-color:var(--ok);color:#04140a}
+
+/* 展开区 */
+.body{display:none;padding:0 13px 13px;border-top:1px solid var(--line)}
+.card.open .body{display:block}
+.sec-label{font-size:11.5px;color:var(--fg3);margin:11px 0 7px;letter-spacing:.4px}
+/* 题目单元：上面是勾选方块，下面是仓库题解链接 */
+.plist{display:flex;flex-wrap:wrap;gap:6px}
+.pi{display:flex;flex-direction:column;gap:3px;align-items:stretch}
+.p{
+  height:36px;min-width:44px;padding:0 8px;border-radius:8px;border:1.5px solid var(--line);
+  background:var(--bg3);display:grid;place-items:center;position:relative;
+  font-weight:600;font-size:13.5px;transition:.12s;user-select:none;cursor:pointer;
+}
+.p:hover{transform:translateY(-1px);border-color:var(--accent)}
+.p.state-solved{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.p.state-review{background:var(--warnbg);border-color:var(--warn);color:var(--warn)}
+.p.unknown{border-style:dashed;color:var(--fg3)}
+.p .mk{position:absolute;top:-2px;right:1px;font-size:10px;color:var(--ok)}
+.p.state-review .mk{color:var(--warn)}
+.src{display:flex;gap:3px;justify-content:center}
+.src a{font-size:9.5px;line-height:1.5;color:var(--fg3);padding:0 4px;border:1px solid var(--line);border-radius:4px;background:var(--bg2)}
+.src a:hover{color:var(--accent);border-color:var(--accent);text-decoration:none}
+.note{font-size:12px;color:var(--fg2);margin-top:9px;padding-left:10px;border-left:2px solid var(--line);white-space:pre-wrap;word-break:break-word}
+.empty{font-size:12.5px;color:var(--fg3);padding:8px 0}
+footer{color:var(--fg3);font-size:12px;margin-top:26px;line-height:1.9;border-top:1px solid var(--line);padding-top:14px}
+footer code{background:var(--bg3);padding:1px 5px;border-radius:4px}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+  background:var(--bg3);border:1px solid var(--line);color:var(--fg);padding:9px 16px;border-radius:99px;
+  font-size:13px;box-shadow:0 6px 24px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:.25s;z-index:99;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (max-width:640px){
+  .vp{margin-left:0;width:100%;justify-content:center}
+  .mini-bar{display:none}
+  .title{width:100%}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <h1 class="brand">🏁 XCPC VP 打卡台<small>quchen · TYUT</small></h1>
+      <div class="stat"><span class="dot acc"></span>赛站 <b id="s-contest">0</b></div>
+      <div class="stat"><span class="dot ok"></span>已 VP <b id="s-vp">0</b></div>
+      <div class="stat"><span class="dot warn"></span>进行中 <b id="s-doing">0</b></div>
+      <div class="bar" title="整场 VP 完成进度"><i id="s-bar"></i></div>
+      <div class="stat"><b id="s-pct">0%</b></div>
+    </div>
+    <div class="top-row" style="margin-top:9px">
+      <div class="stat"><span class="dot"></span>题目 <b id="s-prob">0</b></div>
+      <div class="stat"><span class="dot ok"></span>已过题 <b id="s-solved">0</b></div>
+      <div class="stat" style="color:var(--fg3)">（数据里已有题解 = 预勾选）</div>
+      <div class="bar" title="单题通过进度"><i id="s-bar2"></i></div>
+      <div class="stat"><b id="s-pct2">0%</b></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <input type="search" id="q" placeholder="搜索赛站 / 城市 / 年份…">
+    <select id="f-series"><option value="">全部赛制</option><option>CCPC</option><option>ICPC</option></select>
+    <select id="f-cat"><option value="">全部类型</option><option value="regional">区域赛</option><option value="online">网络赛</option></select>
+    <select id="f-year"><option value="">全部年份</option></select>
+    <select id="f-status">
+      <option value="">全部状态</option>
+      <option value="none">未开始</option>
+      <option value="doing">进行中</option>
+      <option value="done">已 VP</option>
+      <option value="has">仓库有题解</option>
+    </select>
+    <select id="f-sort">
+      <option value="year">按年份</option>
+      <option value="unsolved">按未过题数</option>
+      <option value="progress">按完成度</option>
+    </select>
+    <button class="btn" id="b-expand">展开全部</button>
+    <button class="btn" id="b-collapse">收起全部</button>
+    <button class="btn" id="b-export">导出进度</button>
+    <button class="btn" id="b-import">导入进度</button>
+    <button class="btn" id="b-reset">重置</button>
+  </div>
+  <div class="hint">
+    点赛站标题行展开题目 · 点题目方块循环切换 <b>未做 → 已过 → 待复习</b> · 右键方块直接清空 · 勾选自动存在本机浏览器
+  </div>
+  <div class="list" id="list"></div>
+
+  <footer>
+    <div>数据来源：<a id="src" href="#" target="_blank" rel="noopener">XCPC-Solutions</a> · 生成于 <span id="gen">—</span></div>
+    <div>进度保存在本机浏览器 <code>localStorage</code>，换设备/换浏览器不同步。用「导出进度」备份成 JSON，「导入进度」可在别的设备恢复。</div>
+    <div>题目清单里 <b>虚线框</b> 的题号表示该赛站官方题数里、仓库尚未收录题解的题；实线框表示仓库里已有你的题解。</div>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+
+var DATA = window.XCPC_DATA || {meta:{},contests:[]};
+var CONTESTS = DATA.contests || [];
+var SKEY = "xcpc-vp-tracker-v1";
+var PKEY = {none:0, solved:1, review:2};      // 单题状态
+var STATE_NAME = {0:"none",1:"solved",2:"review"};
+
+/* ---------------- 状态 ---------------- */
+var S = { vp:{}, prob:{}, open:{}, seeded:[] };
+
+function load(){
+  try{
+    var raw = localStorage.getItem(SKEY);
+    if(!raw) return;
+    var o = JSON.parse(raw);
+    S.vp   = o.vp   || {};
+    S.prob = o.prob || {};
+    S.open = o.open || {};
+    S.seeded = o.seeded || [];
+  }catch(e){ console.warn("读取进度失败", e); }
+}
+function save(){
+  try{ localStorage.setItem(SKEY, JSON.stringify(S)); }
+  catch(e){ toast("保存失败：浏览器存储不可用"); }
+}
+
+/* 首次访问时，把仓库里已有题解的题预勾成「已过」（每题只种一次） */
+function seed(){
+  var changed = false;
+  CONTESTS.forEach(function(c){
+    c.problems.forEach(function(p){
+      if(!p.solved) return;
+      var key = c.id + "/" + p.id;
+      if(S.prob[key] === undefined){
+        // 只有当该题从未被用户手动改过时才种
+        if(S.seeded.indexOf(key) === -1){
+          S.prob[key] = 1;
+          S.seeded.push(key);
+          changed = true;
+        }
+      }
+    });
+  });
+  if(changed) save();
+}
+
+function toggleVp(id){ S.vp[id] = !S.vp[id]; save(); }
+function cycleProb(cid, pid){
+  var k = cid + "/" + pid;
+  var cur = S.prob[k] === undefined ? 0 : S.prob[k];
+  S.prob[k] = (cur + 1) % 3;
+  save();
+}
+function clearProb(cid, pid){
+  var k = cid + "/" + pid;
+  S.prob[k] = 0; save();
+}
+function probState(cid, pid){
+  var v = S.prob[cid + "/" + pid];
+  return v === undefined ? 0 : v;
+}
+
+/* ---------------- 统计 ---------------- */
+function contestStats(c){
+  var total = c.problems.length || (c.totalProblems || 0);
+  var solved = 0, review = 0;
+  c.problems.forEach(function(p){
+    var st = probState(c.id, p.id);
+    if(st === 1) solved++;
+    else if(st === 2) review++;
+  });
+  var pct = total ? Math.round(solved * 100 / total) : 0;
+  var vp = !!S.vp[c.id];
+  // 勾了整场 = 已 VP；没勾但动过题 = 进行中
+  var touched = solved > 0 || review > 0;
+  return {total:total, solved:solved, review:review, pct:pct, vp:vp, touched:touched,
+          status: vp ? "done" : (touched ? "doing" : "none")};
+}
+function allStats(){
+  var o = {contest:0, vp:0, doing:0, prob:0, solved:0, review:0, has:0};
+  CONTESTS.forEach(function(c){
+    var s = contestStats(c);
+    o.contest++;
+    if(s.status === "done") o.vp++;
+    else if(s.status === "doing") o.doing++;
+    if(c.solutionDir) o.has++;
+    o.prob += s.total;
+    o.solved += s.solved;
+    o.review += s.review;
+  });
+  return o;
+}
+
+/* ---------------- 渲染 ---------------- */
+function esc(s){
+  return String(s === null || s === undefined ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+function displayName(c){
+  var cn = c.nameCn || "";
+  var en = c.nameEn || "";
+  var base = cn || en;
+  if(!base) return c.siteRaw || "（未命名）";
+  // 链接表原文带「站」字的才是地名（威海站 / Weihai Site），补"站"；
+  // 不带的是整场比赛的名字（第八届 CCPC 网络预选赛），原样显示
+  var dn = (c.isSite === false) ? base : base + " 站";
+  var sn = subName(c);
+  return esc(dn) + (sn ? '<span class="en"> ' + esc(sn) + '</span>' : "");
+}
+function subName(c){
+  var cn = c.nameCn || "", en = c.nameEn || "";
+  if(!en) return "";
+  // 主标题用了英文，就别再重复一遍
+  if(!cn && en) return "";
+  return en;
+}
+
+var el = {
+  list: document.getElementById("list"),
+  q: document.getElementById("q"),
+  series: document.getElementById("f-series"),
+  cat: document.getElementById("f-cat"),
+  year: document.getElementById("f-year"),
+  status: document.getElementById("f-status"),
+  sort: document.getElementById("f-sort")
+};
+var expandedFilter = null;
+
+function years(){
+  var set = {};
+  CONTESTS.forEach(function(c){ set[c.year] = 1; });
+  return Object.keys(set).sort();
+}
+function applyFilters(){
+  var q = el.q.value.trim().toLowerCase();
+  var series = el.series.value, cat = el.cat.value, year = el.year.value, status = el.status.value;
+  var out = CONTESTS.filter(function(c){
+    if(series && c.series !== series) return false;
+    if(cat && c.category !== cat) return false;
+    if(year && String(c.year) !== year) return false;
+    if(q){
+      var hay = [c.nameCn, c.nameEn, c.siteRaw, c.section, c.year, c.series].join(" ").toLowerCase();
+      if(hay.indexOf(q) === -1) return false;
+    }
+    if(status){
+      var s = contestStats(c);
+      if(status === "has"){ if(!c.solutionDir) return false; }
+      else if(s.status !== status) return false;
+    }
+    return true;
+  });
+  var sortBy = el.sort.value;
+  out.sort(function(a, b){
+    if(sortBy === "unsolved"){
+      var d = (contestStats(a).total - contestStats(a).solved) - (contestStats(b).total - contestStats(b).solved);
+      if(d) return -d;
+    }else if(sortBy === "progress"){
+      var d2 = contestStats(b).pct - contestStats(a).pct;
+      if(d2) return d2;
+    }
+    if(a.year !== b.year) return a.year - b.year;
+    if(a.series !== b.series) return a.series === "CCPC" ? -1 : 1;
+    return (a.nameEn || a.nameCn || "").localeCompare(b.nameEn || b.nameCn || "");
+  });
+  return out;
+}
+
+function render(){
+  var rows = applyFilters();
+  var html = [];
+  rows.forEach(function(c){
+    var s = contestStats(c);
+    var open = S.open[c.id] === true;
+    var cls = "card" + (open ? " open" : "") + (s.status === "done" ? " done" : "");
+
+    var linkHtml = (c.links || []).map(function(l){
+      var k = l.kind === "QOJ" ? "qoj" : (l.kind === "CF Gym" ? "cf" : (l.kind === "VJudge" ? "vj" : ""));
+      return '<a class="' + k + '" href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label || l.kind) + '</a>';
+    }).join("");
+    if(c.repoUrl) linkHtml += '<a href="' + esc(c.repoUrl) + '" target="_blank" rel="noopener">仓库题解</a>';
+    if(c.hasEditorial && c.solutionDir)
+      linkHtml += '<a href="https://github.com/Wat-sons/XCPC-Solutions/blob/main/' + esc(c.solutionDir) + '/editorial.md" target="_blank" rel="noopener">外链题解</a>';
+
+    var tags = '<span class="tag ' + (c.series === "CCPC" ? "ccpc" : "icpc") + '">' + c.series + '</span>'
+      + '<span class="tag cat">' + (c.category === "online" ? "网络赛" : "区域赛") + '</span>'
+      + '<span class="tag">' + c.year + '</span>';
+    if(c.solutionDir) tags += '<span class="tag has">有题解</span>';
+
+    var probs = c.problems.map(function(p){
+      var st = probState(c.id, p.id);
+      var cls2 = "p state-" + STATE_NAME[st] + (p.unknown && st === 0 ? " unknown" : "");
+      var sub = "";
+      if(p.solved){
+        var items = "";
+        p.cpp.forEach(function(fn, i){
+          items += '<a href="https://github.com/Wat-sons/XCPC-Solutions/blob/main/' + esc(c.solutionDir) + '/' + esc(p.id) + '/' + esc(fn) + '" target="_blank" rel="noopener" title="' + esc(fn) + '">' + (i === 0 ? "C++" : "C++" + (i + 1)) + '</a>';
+        });
+        if(p.md.length)
+          items += '<a href="https://github.com/Wat-sons/XCPC-Solutions/blob/main/' + esc(c.solutionDir) + '/' + esc(p.id) + '/' + esc(p.md[0]) + '" target="_blank" rel="noopener" title="' + esc(p.md[0]) + '">题解</a>';
+        if(items) sub = '<span class="src">' + items + '</span>';
+      }
+      var title = p.unknown
+        ? "题 " + p.id + "（仓库未收录，题号据官方题数补齐）"
+        : "题 " + p.id + " · 仓库已有题解";
+      return '<div class="pi">'
+        + '<div class="' + cls2 + '" data-c="' + c.id + '" data-p="' + esc(p.id) + '" title="' + esc(title) + '">'
+        +   '<span class="mk">' + (st === 1 ? "✓" : st === 2 ? "↻" : "") + '</span>'
+        +   '<span>' + esc(p.id) + '</span>'
+        + '</div>'
+        + (sub ? '<span class="src">' + sub + '</span>' : '')
+        + '</div>';
+    }).join("");
+
+    var noteHtml = "";
+    if(c.note) noteHtml += '<div class="note">📝 ' + esc(c.note) + '</div>';
+    if(!c.solutionDir) noteHtml += '<div class="note">仓库里还没有这个赛站的题解，先打 VP，补完题解再传上去。</div>';
+
+    var meta = [];
+    if(c.totalProblems) meta.push("官方 " + c.totalProblems + " 题");
+    meta.push("已过 " + s.solved);
+    if(s.review) meta.push("待复习 " + s.review);
+    if(!c.totalProblems) meta.push("题数 " + s.total);
+
+    html.push(
+      '<div class="' + cls + '" data-id="' + c.id + '">'
+      + '<div class="hd" data-act="toggle">'
+      +   '<span class="caret">▶</span>'
+      +   '<span class="title">' + displayName(c) + '</span>'
+      +   tags
+      +   '<span class="links">' + linkHtml + '</span>'
+      +   '<span class="mini-bar"><i style="width:' + s.pct + '%"></i></span>'
+      +   '<span class="count">' + s.solved + '/' + s.total + ' · ' + s.pct + '%</span>'
+      +   '<button class="vp' + (s.vp ? " on" : "") + '" data-act="vp" title="标记整场 VP 已完成"><span class="box">✓</span>已 VP</button>'
+      + '</div>'
+      + '<div class="body">'
+      +   '<div class="sec-label">' + esc(meta.join(" · ")) + ' —— 点击方块标记「已过 / 待复习」</div>'
+      +   '<div class="plist">' + (probs || '<div class="empty">暂无题目数据</div>') + '</div>'
+      +   noteHtml
+      + '</div>'
+      + '</div>'
+    );
+  });
+  el.list.innerHTML = html.join("") || '<div class="empty">没有符合条件的赛站。</div>';
+  updateHeader();
+}
+
+function updateHeader(){
+  var o = allStats();
+  var pctC = o.contest ? Math.round(o.vp * 100 / o.contest) : 0;
+  var pctP = o.prob ? Math.round(o.solved * 100 / o.prob) : 0;
+  document.getElementById("s-contest").textContent = o.contest;
+  document.getElementById("s-vp").textContent = o.vp;
+  document.getElementById("s-doing").textContent = o.doing;
+  document.getElementById("s-prob").textContent = o.prob;
+  document.getElementById("s-solved").textContent = o.solved;
+  document.getElementById("s-bar").style.width = pctC + "%";
+  document.getElementById("s-bar2").style.width = pctP + "%";
+  document.getElementById("s-pct").textContent = pctC + "%";
+  document.getElementById("s-pct2").textContent = pctP + "%";
+  document.title = "XCPC VP 打卡台 · 已 VP " + o.vp + "/" + o.contest;
+}
+
+/* ---------------- 交互 ---------------- */
+el.list.addEventListener("click", function(ev){
+  var chip = ev.target.closest(".p");
+  if(chip){
+    // 题解链接现在是方块的兄弟节点，不在方块里，点到链接不会走到这里
+    var cid = chip.dataset.c, pid = chip.dataset.p;
+    cycleProb(cid, pid);
+    var st = probState(cid, pid);
+    // 保留 unknown（虚线）这个附加类
+    chip.className = "p state-" + STATE_NAME[st] + (chip.classList.contains("unknown") ? " unknown" : "");
+    chip.querySelector(".mk").textContent = st === 1 ? "✓" : st === 2 ? "↻" : "";
+    updateHeader();
+    var card = chip.closest(".card");
+    refreshCardStats(card);
+    return;
+  }
+  var vp = ev.target.closest('[data-act="vp"]');
+  if(vp){
+    var id = vp.closest(".card").dataset.id;
+    toggleVp(id);
+    render();
+    return;
+  }
+  var hd = ev.target.closest('[data-act="toggle"]');
+  if(hd){
+    if(ev.target.closest("a")) return;
+    var card2 = hd.closest(".card");
+    var cid2 = card2.dataset.id;
+    S.open[cid2] = !(S.open[cid2] === true);
+    card2.classList.toggle("open", S.open[cid2]);
+    save();
+  }
+});
+el.list.addEventListener("contextmenu", function(ev){
+  var chip = ev.target.closest(".p");
+  if(!chip) return;
+  ev.preventDefault();
+  clearProb(chip.dataset.c, chip.dataset.p);
+  chip.className = "p" + (chip.classList.contains("unknown") ? " unknown" : "");
+  chip.querySelector(".mk").textContent = "";
+  updateHeader();
+  refreshCardStats(chip.closest(".card"));
+});
+
+function refreshCardStats(card){
+  var id = card.dataset.id;
+  var c = CONTESTS.filter(function(x){ return x.id === id; })[0];
+  if(!c) return;
+  var s = contestStats(c);
+  card.querySelector(".mini-bar > i").style.width = s.pct + "%";
+  card.querySelector(".count").textContent = s.solved + "/" + s.total + " · " + s.pct + "%";
+  var vp = card.querySelector(".vp");
+  vp.classList.toggle("on", s.vp);
+  card.classList.toggle("done", s.status === "done");
+}
+
+[el.q, el.series, el.cat, el.year, el.status, el.sort].forEach(function(x){
+  x.addEventListener("input", render);
+  x.addEventListener("change", render);
+});
+
+document.getElementById("b-expand").addEventListener("click", function(){
+  applyFilters().forEach(function(c){ S.open[c.id] = true; });
+  save(); render();
+});
+document.getElementById("b-collapse").addEventListener("click", function(){
+  S.open = {}; save(); render();
+});
+document.getElementById("b-reset").addEventListener("click", function(){
+  if(!confirm("清空所有 VP 标记和单题进度？此操作不可撤销。\n（建议先「导出进度」备份）")) return;
+  S = {vp:{}, prob:{}, open:{}, seeded:[]};
+  save(); render(); toast("已重置");
+});
+
+function download(name, text){
+  var b = new Blob([text], {type:"application/json;charset=utf-8"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(b);
+  a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+}
+document.getElementById("b-export").addEventListener("click", function(){
+  var d = new Date();
+  var pad = function(n){ return (n < 10 ? "0" : "") + n; };
+  var stamp = d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + "-" + pad(d.getHours()) + pad(d.getMinutes());
+  download("xcpc-vp-progress-" + stamp + ".json", JSON.stringify({
+    app:"xcpc-vp-tracker", version:1,
+    exportedAt: d.toISOString(),
+    vp: S.vp, prob: S.prob, seeded: S.seeded
+  }, null, 1));
+  toast("已导出进度文件");
+});
+document.getElementById("b-import").addEventListener("click", function(){
+  var inp = document.createElement("input");
+  inp.type = "file"; inp.accept = ".json,application/json";
+  inp.addEventListener("change", function(){
+    var f = inp.files && inp.files[0];
+    if(!f) return;
+    var fr = new FileReader();
+    fr.onload = function(){
+      try{
+        var o = JSON.parse(fr.result);
+        if(!o || typeof o !== "object" || (!o.vp && !o.prob)) throw new Error("格式不对");
+        if(!confirm("导入会覆盖当前进度，继续？")) return;
+        S.vp = o.vp || {};
+        S.prob = o.prob || {};
+        S.seeded = o.seeded || [];
+        save(); render(); toast("已导入进度");
+      }catch(e){ alert("导入失败：" + e.message); }
+    };
+    fr.readAsText(f);
+  });
+  inp.click();
+});
+
+/* ---------------- 启动 ---------------- */
+var ty = document.getElementById("f-year");
+years().forEach(function(y){
+  var o = document.createElement("option");
+  o.value = y; o.textContent = y + " 年";
+  ty.appendChild(o);
+});
+document.getElementById("src").href = DATA.meta.source || "#";
+document.getElementById("gen").textContent = DATA.meta.generatedAt || "—";
+
+var toastTimer = null;
+function toast(msg){
+  var t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 1800);
+}
+
+load();
+seed();
+// 默认展开「仓库已有题解」的赛站，方便直接接着打
+if(Object.keys(S.open).length === 0){
+  CONTESTS.forEach(function(c){ if(c.solutionDir) S.open[c.id] = true; });
+}
+render();
+})();
+</script>
+</body>
+</html>

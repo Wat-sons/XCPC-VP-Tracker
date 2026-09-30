@@ -1,0 +1,7 @@
+_browser/
+_gen.log
+_verify.txt
+_domtest.txt
+_titles.txt
+_titles_stdout.txt
+__pycache__/
