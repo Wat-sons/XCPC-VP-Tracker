@@ -133,6 +133,15 @@ header.top{
 .p.unknown{border-style:dashed;color:var(--fg3)}
 .p .mk{position:absolute;top:-2px;right:1px;font-size:10px;color:var(--ok)}
 .p.state-review .mk{color:var(--warn)}
+/* CF 自动勾选的题：右上角带 CF 角标，边框用青色区分 */
+.p.from-cf{border-color:var(--info)}
+.p.from-cf.state-solved{background:rgba(56,189,248,.13);border-color:var(--info);color:var(--info)}
+.p .cfdot{
+  position:absolute;bottom:-1px;right:-1px;font-size:8px;line-height:1;
+  padding:1px 2px;border-radius:3px;background:var(--info);color:#04141f;font-weight:700;
+}
+.tag.cfvp{color:var(--info);border-color:rgba(56,189,248,.5)}
+.note.cfnote{border-left-color:var(--info);color:var(--fg2)}
 .src{display:flex;gap:3px;justify-content:center}
 .src a{font-size:9.5px;line-height:1.5;color:var(--fg3);padding:0 4px;border:1px solid var(--line);border-radius:4px;background:var(--bg2)}
 .src a:hover{color:var(--accent);border-color:var(--accent);text-decoration:none}
@@ -214,18 +223,65 @@ footer code{background:var(--bg3);padding:1px 5px;border-radius:4px}
 <div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
+<script src="cf-progress.js"></script>
+<script src="extra-contests.js"></script>
 <script>
 (function(){
 "use strict";
 
 var DATA = window.XCPC_DATA || {meta:{},contests:[]};
+// CF 上打过、但链接表没收的比赛（省级赛 / 邀请赛 / 网络赛），由 build_extra_contests.py 生成
+var EXTRA = (window.EXTRA_CONTESTS && window.EXTRA_CONTESTS.contests) || [];
+(function mergeExtra(){
+  var have = {};
+  DATA.contests.forEach(function(c){ have[c.id] = 1; });
+  EXTRA.forEach(function(e, i){
+    var id = "x" + (e.contestId || i);
+    if(have[id]) return;
+    var year = null;
+    var m = String(e.name || "").match(/(20\d{2})/);
+    if(m) year = parseInt(m[1], 10);
+    if(!year && e.firstSubmission) year = parseInt(String(e.firstSubmission).slice(0, 4), 10);
+    DATA.contests.push({
+      id: id,
+      year: year || 0,
+      category: "provincial",
+      series: /CCPC/i.test(e.name) ? "CCPC" : "ICPC",
+      nameCn: null,
+      nameEn: e.name || ("Codeforces " + e.contestId),
+      siteRaw: e.name || String(e.contestId),
+      section: "CF 上打过（链接表未收录）",
+      isSite: false,
+      cfId: e.contestId,
+      kind: e.kind,
+      totalProblems: null,
+      problemCount: e.problemCount || 0,
+      solvedCount: e.solvedCount || 0,
+      links: e.url ? [{label: e.kind === "gym" ? "CF Gym" : "CF", url: e.url, kind: e.kind === "gym" ? "CF Gym" : "其它"}] : [],
+      note: "",
+      solutionDir: null,
+      repoUrl: null,
+      hasEditorial: false,
+      problems: Object.keys(e.problems || {}).sort().map(function(idx){
+        var st = e.problems[idx];
+        return {id: idx, solved: false, cpp: [], md: [], note: null,
+                unknown: !st.ok, cfOk: !!st.ok, cfTries: st.tries || 0};
+      })
+    });
+  });
+})();
 var CONTESTS = DATA.contests || [];
-var SKEY = "xcpc-vp-tracker-v1";
+// CF 抓取结果（可选）：window.CF_PROGRESS = {contests:{"<contestId>":{...}}}
+var CF = (window.CF_PROGRESS && window.CF_PROGRESS.contests) ? window.CF_PROGRESS : null;
+var SKEY = "xcpc-vp-tracker-v2";
 var PKEY = {none:0, solved:1, review:2};      // 单题状态
 var STATE_NAME = {0:"none",1:"solved",2:"review"};
 
 /* ---------------- 状态 ---------------- */
-var S = { vp:{}, prob:{}, open:{}, seeded:[] };
+// vp[id]  : true，或 {on:true, src:"cf"|"me"}（带来源）
+// prob[k] : 0/1/2，或 {st:1, src:"repo"|"cf"|"me"}
+// seeded  : {"repo":[...], "cf":[...]} 各来源已种过的键，保证可重复种而不覆盖手动修改
+var S = { vp:{}, prob:{}, open:{}, seeded:{repo:[], cf:[]} };
 
 function load(){
   try{
@@ -235,7 +291,8 @@ function load(){
     S.vp   = o.vp   || {};
     S.prob = o.prob || {};
     S.open = o.open || {};
-    S.seeded = o.seeded || [];
+    if(Array.isArray(o.seeded)) S.seeded = {repo:o.seeded, cf:[]};
+    else S.seeded = {repo:(o.seeded&&o.seeded.repo)||[], cf:(o.seeded&&o.seeded.cf)||[]};
   }catch(e){ console.warn("读取进度失败", e); }
 }
 function save(){
@@ -243,40 +300,97 @@ function save(){
   catch(e){ toast("保存失败：浏览器存储不可用"); }
 }
 
-/* 首次访问时，把仓库里已有题解的题预勾成「已过」（每题只种一次） */
+/* ---------------- 状态读取（支持新旧两种存法） ---------------- */
+function probVal(k){
+  var v = S.prob[k];
+  if(v === undefined || v === null) return {st:0, src:null};
+  if(typeof v === "number") return {st:v, src:"me"};
+  return {st:v.st||0, src:v.src||"me"};
+}
+function vpVal(id){
+  var v = S.vp[id];
+  if(!v) return {on:false, src:null};
+  if(v === true) return {on:true, src:"me"};
+  return {on:!!v.on, src:v.src||"me"};
+}
+function probState(cid, pid){ return probVal(cid + "/" + pid).st; }
+function vpOn(id){ return vpVal(id).on; }
+
+/* 从 CF 链接里取 contestId —— 必须限定 codeforces.com，
+   否则会把 qoj.ac/contest/1252 这种当成 CF 的比赛号（踩过这个坑） */
+function cfIdOfLink(url){
+  var u = String(url || "");
+  if(u.indexOf("codeforces.com") === -1) return null;
+  var m = u.match(/(?:gym|contest)\/(\d+)/);
+  return m ? m[1] : null;
+}
+/* 把 CF 抓到的比赛和页面的赛站对应起来 */
+function cfForContest(c){
+  if(!CF) return null;
+  var cands = [];
+  (c.links || []).forEach(function(l){
+    var id = cfIdOfLink(l.url);
+    if(id && CF.contests[id]) cands.push(CF.contests[id]);
+  });
+  if(!cands.length && c.cfId && CF.contests[String(c.cfId)]) cands.push(CF.contests[String(c.cfId)]);
+  if(!cands.length) return null;
+  // 一张卡片可能挂多场 CF 比赛；优先用"确定 VP"的那场，其次正式参赛，最后才补题
+  var rank = {vp:0, contest:1, practice:2, other:3};
+  cands.sort(function(a, b){ return (rank[a.status]||9) - (rank[b.status]||9); });
+  return cands[0];
+}
+
+/* 预勾选：仓库里有题解 → 已过；CF 上 AC 过 → 已过；CF 判定 VP → 整场已 VP */
 function seed(){
   var changed = false;
+  function put(k, st, src, bucket){
+    if(S.seeded[bucket].indexOf(k) !== -1) return;   // 这一来源种过了
+    S.seeded[bucket].push(k);
+    changed = true;
+    var cur = probVal(k);
+    // 用户手动改过的（src=me）不覆盖；两个来源都指向"已过"时取最高
+    if(cur.src === "me") return;
+    if(st === 1 && cur.st !== 1) S.prob[k] = {st:1, src:src};
+  }
+
   CONTESTS.forEach(function(c){
     c.problems.forEach(function(p){
-      if(!p.solved) return;
-      var key = c.id + "/" + p.id;
-      if(S.prob[key] === undefined){
-        // 只有当该题从未被用户手动改过时才种
-        if(S.seeded.indexOf(key) === -1){
-          S.prob[key] = 1;
-          S.seeded.push(key);
-          changed = true;
-        }
-      }
+      var k = c.id + "/" + p.id;
+      if(p.solved) put(k, 1, "repo", "repo");
     });
+
+    var cf = cfForContest(c);
+    if(!cf) return;
+    Object.keys(cf.problems || {}).forEach(function(idx){
+      if(!cf.problems[idx].ok) return;
+      var k = c.id + "/" + idx;
+      put(k, 1, "cf", "cf");
+    });
+    if(cf.status === "vp"){
+      var v = vpVal(c.id);
+      if(!v.on){
+        // 已有标记且来自用户时不覆盖
+        S.vp[c.id] = {on:true, src:"cf"};
+        changed = true;
+      }
+    }
   });
   if(changed) save();
 }
 
-function toggleVp(id){ S.vp[id] = !S.vp[id]; save(); }
+function toggleVp(id){
+  var v = vpVal(id);
+  S.vp[id] = v.on ? {on:false, src:"me"} : {on:true, src:"me"};
+  save();
+}
 function cycleProb(cid, pid){
   var k = cid + "/" + pid;
-  var cur = S.prob[k] === undefined ? 0 : S.prob[k];
-  S.prob[k] = (cur + 1) % 3;
+  var cur = probVal(k).st;
+  S.prob[k] = {st:(cur + 1) % 3, src:"me"};
   save();
 }
 function clearProb(cid, pid){
-  var k = cid + "/" + pid;
-  S.prob[k] = 0; save();
-}
-function probState(cid, pid){
-  var v = S.prob[cid + "/" + pid];
-  return v === undefined ? 0 : v;
+  S.prob[cid + "/" + pid] = {st:0, src:"me"}; save();
 }
 
 /* ---------------- 统计 ---------------- */
@@ -289,11 +403,12 @@ function contestStats(c){
     else if(st === 2) review++;
   });
   var pct = total ? Math.round(solved * 100 / total) : 0;
-  var vp = !!S.vp[c.id];
+  var vpv = vpVal(c.id);
+  var vp = vpv.on;
   // 勾了整场 = 已 VP；没勾但动过题 = 进行中
   var touched = solved > 0 || review > 0;
-  return {total:total, solved:solved, review:review, pct:pct, vp:vp, touched:touched,
-          status: vp ? "done" : (touched ? "doing" : "none")};
+  return {total:total, solved:solved, review:review, pct:pct, vp:vp, vpSrc:vpv.src,
+          touched:touched, status: vp ? "done" : (touched ? "doing" : "none")};
 }
 function allStats(){
   var o = {contest:0, vp:0, doing:0, prob:0, solved:0, review:0, has:0};
@@ -407,8 +522,10 @@ function render(){
     if(c.solutionDir) tags += '<span class="tag has">有题解</span>';
 
     var probs = c.problems.map(function(p){
-      var st = probState(c.id, p.id);
+      var pv = probVal(c.id + "/" + p.id);
+      var st = pv.st;
       var cls2 = "p state-" + STATE_NAME[st] + (p.unknown && st === 0 ? " unknown" : "");
+      if(pv.src === "cf") cls2 += " from-cf";
       var sub = "";
       if(p.solved){
         var items = "";
@@ -419,13 +536,16 @@ function render(){
           items += '<a href="https://github.com/Wat-sons/XCPC-Solutions/blob/main/' + esc(c.solutionDir) + '/' + esc(p.id) + '/' + esc(p.md[0]) + '" target="_blank" rel="noopener" title="' + esc(p.md[0]) + '">题解</a>';
         if(items) sub = '<span class="src">' + items + '</span>';
       }
-      var title = p.unknown
-        ? "题 " + p.id + "（仓库未收录，题号据官方题数补齐）"
-        : "题 " + p.id + " · 仓库已有题解";
+      var title = "题 " + p.id;
+      if(p.unknown) title += "（仓库未收录，题号据官方题数补齐）";
+      else if(p.solved) title += " · 仓库已有题解";
+      if(pv.src === "cf") title += " · CF 上已 AC（自动勾选）";
+      else if(pv.src === "me") title += " · 你手动标记的";
       return '<div class="pi">'
         + '<div class="' + cls2 + '" data-c="' + c.id + '" data-p="' + esc(p.id) + '" title="' + esc(title) + '">'
         +   '<span class="mk">' + (st === 1 ? "✓" : st === 2 ? "↻" : "") + '</span>'
         +   '<span>' + esc(p.id) + '</span>'
+        +   ((pv.src === "cf" && st === 1) ? '<span class="cfdot" title="CF 上已 AC">CF</span>' : '')
         + '</div>'
         + (sub ? '<span class="src">' + sub + '</span>' : '')
         + '</div>';
@@ -433,6 +553,19 @@ function render(){
 
     var noteHtml = "";
     if(c.note) noteHtml += '<div class="note">📝 ' + esc(c.note) + '</div>';
+    var cf = cfForContest(c);
+    if(cf){
+      var cfBits = [];
+      if(cf.status === "vp") cfBits.push("CF 判定 <b>确定 VP</b>（有 VIRTUAL 标记）");
+      else if(cf.status === "contest") cfBits.push("CF 判定 <b>正式参赛</b>（比赛窗口内提交）");
+      else if(cf.status === "practice") cfBits.push("CF 只有赛后补题记录（不算 VP）");
+      cfBits.push("AC " + cf.solvedCount + " 题");
+      if(cf.handles && cf.handles.length) cfBits.push("账号 " + cf.handles.join(" / "));
+      if(cf.firstSubmission) cfBits.push("首次提交 " + cf.firstSubmission);
+      noteHtml += '<div class="note cfnote">🎯 CF 同步：' + cfBits.join(" · ") + '</div>';
+    } else if(CF && c.solutionDir === null && !c.cfId){
+      noteHtml += '<div class="note">CF 上没有这场比赛的提交记录。</div>';
+    }
     if(!c.solutionDir) noteHtml += '<div class="note">仓库里还没有这个赛站的题解，先打 VP，补完题解再传上去。</div>';
 
     var meta = [];
@@ -447,10 +580,13 @@ function render(){
       +   '<span class="caret">▶</span>'
       +   '<span class="title">' + displayName(c) + '</span>'
       +   tags
+      +   (cf && cf.status === "vp" ? '<span class="tag cfvp">CF 已 VP</span>' : '')
       +   '<span class="links">' + linkHtml + '</span>'
       +   '<span class="mini-bar"><i style="width:' + s.pct + '%"></i></span>'
       +   '<span class="count">' + s.solved + '/' + s.total + ' · ' + s.pct + '%</span>'
-      +   '<button class="vp' + (s.vp ? " on" : "") + '" data-act="vp" title="标记整场 VP 已完成"><span class="box">✓</span>已 VP</button>'
+      +   '<button class="vp' + (s.vp ? " on" : "") + '" data-act="vp" title="'
+      +     (s.vpSrc === "cf" ? "由 CF 的 VIRTUAL 标记自动判定；点一下可改为手动状态" : "标记整场 VP 已完成")
+      +     '"><span class="box">✓</span>已 VP' + (s.vpSrc === "cf" ? "·CF" : "") + '</button>'
       + '</div>'
       + '<div class="body">'
       +   '<div class="sec-label">' + esc(meta.join(" · ")) + ' —— 点击方块标记「已过 / 待复习」</div>'
