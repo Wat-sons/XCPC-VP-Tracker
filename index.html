@@ -88,6 +88,15 @@ header.top{
 .tag.ccpc{color:#f59e0b;border-color:rgba(245,158,11,.45)}
 .tag.icpc{color:#38bdf8;border-color:rgba(56,189,248,.45)}
 .tag.cat{color:var(--fg3)}
+/* 各比赛类型给点颜色区分，别让 CF 的 Div 场看起来跟区域赛一样 */
+.tag.cat.regional{color:#f59e0b;border-color:rgba(245,158,11,.4)}
+.tag.cat.online{color:#4ade80;border-color:rgba(74,222,128,.4)}
+.tag.cat.provincial{color:#c084fc;border-color:rgba(192,132,252,.4)}
+.tag.cat.invitational{color:#fb7185;border-color:rgba(251,113,133,.4)}
+.tag.cat.national{color:#fbbf24;border-color:rgba(251,191,36,.5)}
+.tag.cat.collegiate{color:#2dd4bf;border-color:rgba(45,212,191,.4)}
+.tag.cat.cf-div,.tag.cat.cf-edu,.tag.cat.cf-round,.tag.cat.gym-other{color:#60a5fa;border-color:rgba(96,165,250,.4)}
+.tag.div{color:#60a5fa;border-color:rgba(96,165,250,.45);font-variant-numeric:tabular-nums}
 .tag.has{color:var(--ok);border-color:rgba(34,197,94,.45)}
 .mini-bar{width:74px;height:6px;background:var(--bg3);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
 .mini-bar>i{display:block;height:100%;background:var(--ok);width:0}
@@ -188,7 +197,19 @@ footer code{background:var(--bg3);padding:1px 5px;border-radius:4px}
   <div class="toolbar">
     <input type="search" id="q" placeholder="搜索赛站 / 城市 / 年份…">
     <select id="f-series"><option value="">全部赛制</option><option>CCPC</option><option>ICPC</option></select>
-    <select id="f-cat"><option value="">全部类型</option><option value="regional">区域赛</option><option value="online">网络赛</option></select>
+    <select id="f-cat">
+      <option value="">全部类型</option>
+      <option value="regional">区域赛</option>
+      <option value="online">网络赛</option>
+      <option value="provincial">省赛</option>
+      <option value="invitational">邀请赛</option>
+      <option value="national">国赛</option>
+      <option value="collegiate">大学生赛</option>
+      <option value="cf-div">CF Div 场</option>
+      <option value="cf-edu">CF Educational</option>
+      <option value="cf-round">CF Round</option>
+      <option value="gym-other">CF 其它</option>
+    </select>
     <select id="f-year"><option value="">全部年份</option></select>
     <select id="f-status">
       <option value="">全部状态</option>
@@ -245,7 +266,9 @@ var EXTRA = (window.EXTRA_CONTESTS && window.EXTRA_CONTESTS.contests) || [];
     DATA.contests.push({
       id: id,
       year: year || 0,
-      category: "provincial",
+      // 用生成器判定好的类型，不再一律当成"区域赛"
+      category: e.category || (e.kind === "round" ? "cf-round" : "gym-other"),
+      categories: e.categories || [e.category || (e.kind === "round" ? "cf-round" : "gym-other")],
       series: /CCPC/i.test(e.name) ? "CCPC" : "ICPC",
       nameCn: null,
       nameEn: e.name || ("Codeforces " + e.contestId),
@@ -445,9 +468,45 @@ function displayName(c){
 function subName(c){
   var cn = c.nameCn || "", en = c.nameEn || "";
   if(!en) return "";
-  // 主标题用了英文，就别再重复一遍
-  if(!cn && en) return "";
+  // 没有中文名时主标题已经用了英文名，副标题再显示一遍就是重复
+  if(!cn) return "";
   return en;
+}
+/* 比赛类型的中文标签 —— CF 的 Div 场不是区域赛，别贴错 */
+var CAT_LABEL = {
+  regional: "区域赛",
+  online: "网络赛",
+  provincial: "省赛",
+  invitational: "邀请赛",
+  national: "国赛",
+  collegiate: "大学生赛",
+  "cf-div": "CF Div 场",
+  "cf-edu": "CF Educational",
+  "cf-round": "CF Round",
+  "gym-other": "CF 其它"
+};
+function catLabel(c){ return CAT_LABEL[c.category] || c.category || "比赛"; }
+/* 一场比赛可能同时是省赛+邀请赛，把所有适用标签都拿出来 */
+function catLabels(c){
+  var list = (c.categories && c.categories.length) ? c.categories : [c.category || "gym-other"];
+  return list.map(function(k){ return {key:k, label:CAT_LABEL[k] || k}; });
+}
+/* 类型标签的 HTML（复用时保留颜色区分） */
+function catTagsHtml(c){
+  return catLabels(c).map(function(x){
+    return '<span class="tag cat ' + esc(x.key) + '">' + esc(x.label) + '</span>';
+  }).join("");
+}
+/* 筛选时按"任一标签命中"算 */
+function matchesCat(c, want){
+  if(!want) return true;
+  if(c.category === want) return true;
+  return !!(c.categories && c.categories.indexOf(want) !== -1);
+}
+/* 从名字里抠出 Div 级别，做成小标记 */
+function divTag(c){
+  var m = String(c.nameEn || "").match(/Div\.?\s*(\d)/);
+  return m ? ('Div. ' + m[1]) : null;
 }
 
 var el = {
@@ -471,7 +530,7 @@ function applyFilters(){
   var series = el.series.value, cat = el.cat.value, year = el.year.value, status = el.status.value;
   var out = CONTESTS.filter(function(c){
     if(series && c.series !== series) return false;
-    if(cat && c.category !== cat) return false;
+    if(!matchesCat(c, cat)) return false;
     if(year && String(c.year) !== year) return false;
     if(q){
       var hay = [c.nameCn, c.nameEn, c.siteRaw, c.section, c.year, c.series].join(" ").toLowerCase();
@@ -517,8 +576,10 @@ function render(){
       linkHtml += '<a href="https://github.com/Wat-sons/XCPC-Solutions/blob/main/' + esc(c.solutionDir) + '/editorial.md" target="_blank" rel="noopener">外链题解</a>';
 
     var tags = '<span class="tag ' + (c.series === "CCPC" ? "ccpc" : "icpc") + '">' + c.series + '</span>'
-      + '<span class="tag cat">' + (c.category === "online" ? "网络赛" : "区域赛") + '</span>'
+      + catTagsHtml(c)
       + '<span class="tag">' + c.year + '</span>';
+    var dv = divTag(c);
+    if(dv) tags += '<span class="tag div">' + esc(dv) + '</span>';
     if(c.solutionDir) tags += '<span class="tag has">有题解</span>';
 
     var probs = c.problems.map(function(p){

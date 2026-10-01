@@ -1,10 +1,14 @@
 window.EXTRA_CONTESTS = {
- "generatedAt": "2026-10-01T01:07:50+0800",
+ "generatedAt": "2026-10-01T10:41:11+0800",
  "contests": [
   {
    "contestId": 2102,
    "kind": "round",
    "name": "Codeforces Round 1024 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -30,6 +34,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2109,
    "kind": "round",
    "name": "Codeforces Round 1025 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -63,6 +71,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2110,
    "kind": "round",
    "name": "Codeforces Round 1026 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -88,6 +100,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2111,
    "kind": "round",
    "name": "Educational Codeforces Round 179 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -113,6 +129,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2114,
    "kind": "round",
    "name": "Codeforces Round 1027 (Div. 3)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 6,
    "problemCount": 6,
@@ -150,6 +170,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2117,
    "kind": "round",
    "name": "Codeforces Round 1029 (Div. 3)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -179,6 +203,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2121,
    "kind": "round",
    "name": "Codeforces Round 1032 (Div. 3)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -212,6 +240,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2122,
    "kind": "round",
    "name": "Order Capital Round 1 (Codeforces Round 1038, Div. 1 + Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -237,6 +269,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2125,
    "kind": "round",
    "name": "Educational Codeforces Round 181 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -262,6 +298,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2128,
    "kind": "round",
    "name": "Codeforces Round 1039 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -287,6 +327,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2130,
    "kind": "round",
    "name": "Codeforces Round 1040 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -316,6 +360,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2131,
    "kind": "round",
    "name": "Codeforces Round 1042 (Div. 3)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 4,
@@ -345,6 +393,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2132,
    "kind": "round",
    "name": "Codeforces Round 1043 (Div. 3)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -378,6 +430,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2133,
    "kind": "round",
    "name": "Codeforces Round 1044 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -403,6 +459,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2134,
    "kind": "round",
    "name": "Codeforces Round 1045 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -428,6 +488,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2139,
    "kind": "round",
    "name": "Codeforces Round 1048 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -453,6 +517,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2140,
    "kind": "round",
    "name": "Codeforces Round 1049 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 4,
@@ -482,6 +550,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2143,
    "kind": "round",
    "name": "Codeforces Round 1051 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -507,6 +579,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2144,
    "kind": "round",
    "name": "Educational Codeforces Round 182 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -536,6 +612,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2145,
    "kind": "round",
    "name": "Educational Codeforces Round 183 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 5,
@@ -569,6 +649,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2146,
    "kind": "round",
    "name": "Codeforces Round 1052 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -602,6 +686,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2147,
    "kind": "round",
    "name": "Codeforces Global Round 29 (Div. 1 + Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -627,6 +715,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2148,
    "kind": "round",
    "name": "Codeforces Round 1050 (Div. 4)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "vp",
    "solvedCount": 5,
    "problemCount": 6,
@@ -664,6 +756,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2149,
    "kind": "round",
    "name": "Codeforces Round 1054 (Div. 3)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 6,
    "problemCount": 6,
@@ -701,6 +797,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2151,
    "kind": "round",
    "name": "Codeforces Round 1053 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -730,6 +830,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2152,
    "kind": "round",
    "name": "Squarepoint Challenge (Codeforces Round 1055, Div. 1 + Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 5,
@@ -763,6 +867,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2153,
    "kind": "round",
    "name": "Codeforces Round 1057 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -792,6 +900,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2154,
    "kind": "round",
    "name": "Codeforces Round 1060 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -817,6 +929,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2155,
    "kind": "round",
    "name": "Codeforces Round 1056 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -846,6 +962,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2157,
    "kind": "round",
    "name": "Codeforces Round 1066 (Div. 1 + Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 6,
    "problemCount": 6,
@@ -883,6 +1003,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2158,
    "kind": "round",
    "name": "Codeforces Round 1067 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -912,6 +1036,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2160,
    "kind": "round",
    "name": "Codeforces Round 1058 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -941,6 +1069,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2162,
    "kind": "round",
    "name": "Codeforces Round 1059 (Div. 3)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 7,
@@ -982,6 +1114,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2163,
    "kind": "round",
    "name": "Codeforces Round 1063 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1015,6 +1151,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2166,
    "kind": "round",
    "name": "Codeforces Round 1064 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1048,6 +1188,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2167,
    "kind": "round",
    "name": "Codeforces Round 1062 (Div. 4)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 6,
@@ -1085,6 +1229,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2169,
    "kind": "round",
    "name": "Educational Codeforces Round 184 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1118,6 +1266,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2171,
    "kind": "round",
    "name": "Codeforces Round 1065 (Div. 3)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 9,
    "problemCount": 9,
@@ -1167,6 +1319,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2176,
    "kind": "round",
    "name": "Codeforces Round 1070 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 4,
@@ -1196,6 +1352,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2178,
    "kind": "round",
    "name": "Good Bye 2025",
+   "category": "gym-other",
+   "categories": [
+    "gym-other"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1229,6 +1389,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2179,
    "kind": "round",
    "name": "Codeforces Round 1071 (Div. 3)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 6,
    "problemCount": 6,
@@ -1266,6 +1430,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2180,
    "kind": "round",
    "name": "Codeforces Global Round 31 (Div. 1 + Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 5,
@@ -1299,6 +1467,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2188,
    "kind": "round",
    "name": "Codeforces Round 1077 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -1328,6 +1500,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2189,
    "kind": "round",
    "name": "Codeforces Round 1075 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 5,
@@ -1361,6 +1537,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2192,
    "kind": "round",
    "name": "Codeforces Round 1081 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 3,
@@ -1386,6 +1566,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2197,
    "kind": "round",
    "name": "Codeforces Round 1079 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1419,6 +1603,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2202,
    "kind": "round",
    "name": "Codeforces Round 1082 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 6,
    "problemCount": 6,
@@ -1456,6 +1644,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2203,
    "kind": "round",
    "name": "Educational Codeforces Round 187 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -1485,6 +1677,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2204,
    "kind": "round",
    "name": "Educational Codeforces Round 188 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1518,6 +1714,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2205,
    "kind": "round",
    "name": "Codeforces Round 1083 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -1547,6 +1747,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2207,
    "kind": "round",
    "name": "Codeforces Round 1085 (Div. 1 + Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 2,
    "problemCount": 3,
@@ -1572,6 +1776,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2208,
    "kind": "round",
    "name": "Codeforces Round 1086 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 5,
@@ -1605,6 +1813,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2209,
    "kind": "round",
    "name": "Codeforces Round 1087 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1638,6 +1850,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2210,
    "kind": "round",
    "name": "Codeforces Round 1089 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 3,
    "problemCount": 4,
@@ -1667,6 +1883,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2211,
    "kind": "round",
    "name": "Nebius Round 2 (Codeforces Round 1088, Div. 1 + Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1700,6 +1920,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2219,
    "kind": "round",
    "name": "Codeforces Round 1093 (Div. 1)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -1729,6 +1953,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2222,
    "kind": "round",
    "name": "Spectral::Cup 2026 Round 1 (Codeforces Round 1094, Div. 1 + Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1762,6 +1990,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2225,
    "kind": "round",
    "name": "Educational Codeforces Round 189 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1795,6 +2027,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2226,
    "kind": "round",
    "name": "Codeforces Round 1095 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -1824,6 +2060,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2230,
    "kind": "round",
    "name": "Educational Codeforces Round 190 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1857,6 +2097,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2232,
    "kind": "round",
    "name": "Codeforces Round 1101 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 6,
@@ -1894,6 +2138,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2237,
    "kind": "round",
    "name": "Order Capital Round 2 (Codeforces Round 1104, Div. 1 + Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -1927,6 +2175,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2238,
    "kind": "round",
    "name": "Codeforces Round 1106 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -1956,6 +2208,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2242,
    "kind": "round",
    "name": "Educational Codeforces Round 192 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 5,
@@ -1989,6 +2245,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2245,
    "kind": "round",
    "name": "Spectral::Cup 2026 Round 3 (Codeforces Round 1110, Div. 1 + Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -2022,6 +2282,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2247,
    "kind": "round",
    "name": "Codeforces Round 1111 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -2055,6 +2319,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2249,
    "kind": "round",
    "name": "Codeforces Round 1112 (Div. 1)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 2,
    "problemCount": 2,
@@ -2076,6 +2344,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2252,
    "kind": "round",
    "name": "Codeforces Round 1115 (Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 5,
    "problemCount": 5,
@@ -2109,6 +2381,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 2253,
    "kind": "round",
    "name": "Educational Codeforces Round 193 (Rated for Div. 2)",
+   "category": "cf-div",
+   "categories": [
+    "cf-div"
+   ],
    "status": "contest",
    "solvedCount": 4,
    "problemCount": 4,
@@ -2137,7 +2413,13 @@ window.EXTRA_CONTESTS = {
   {
    "contestId": 104396,
    "kind": "gym",
-   "name": "2023 Jiangsu Collegiate Programming Contest, 2023 National",
+   "name": "2023 Jiangsu Collegiate Programming Contest, 2023 National Invitational of CCPC (Hunan), The 13th Xiangtan Collegiate Programming Contest",
+   "category": "invitational",
+   "categories": [
+    "invitational",
+    "national",
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 6,
    "problemCount": 6,
@@ -2174,7 +2456,11 @@ window.EXTRA_CONTESTS = {
   {
    "contestId": 105139,
    "kind": "gym",
-   "name": "The 2024 International Collegiate Programming Contest in H",
+   "name": "The 2024 International Collegiate Programming Contest in Hubei Province, China",
+   "category": "collegiate",
+   "categories": [
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 7,
    "problemCount": 7,
@@ -2215,7 +2501,13 @@ window.EXTRA_CONTESTS = {
   {
    "contestId": 105143,
    "kind": "gym",
-   "name": "2024 ICPC National Invitational Collegiate Programming Con",
+   "name": "2024 ICPC National Invitational Collegiate Programming Contest, Wuhan Site",
+   "category": "invitational",
+   "categories": [
+    "invitational",
+    "national",
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 6,
    "problemCount": 6,
@@ -2252,7 +2544,14 @@ window.EXTRA_CONTESTS = {
   {
    "contestId": 105170,
    "kind": "gym",
-   "name": "The 2024 CCPC National Invitational Contest (Changchun) ,",
+   "name": "The 2024 CCPC National Invitational Contest (Changchun) , The 17th Jilin Provincial Collegiate Programming Contest",
+   "category": "invitational",
+   "categories": [
+    "invitational",
+    "national",
+    "provincial",
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 7,
    "problemCount": 7,
@@ -2294,6 +2593,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 105184,
    "kind": "gym",
    "name": "The 8th Hebei Collegiate Programming Contest",
+   "category": "collegiate",
+   "categories": [
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 6,
    "problemCount": 6,
@@ -2331,6 +2634,11 @@ window.EXTRA_CONTESTS = {
    "contestId": 105222,
    "kind": "gym",
    "name": "The 2024 Sichuan Provincial Collegiate Programming Contest",
+   "category": "provincial",
+   "categories": [
+    "provincial",
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 8,
    "problemCount": 8,
@@ -2376,6 +2684,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 105229,
    "kind": "gym",
    "name": "The 2024 Shanghai Collegiate Programming Contest",
+   "category": "collegiate",
+   "categories": [
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 5,
    "problemCount": 6,
@@ -2413,6 +2725,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 105336,
    "kind": "gym",
    "name": "The 2024 CCPC Online Contest",
+   "category": "online",
+   "categories": [
+    "online"
+   ],
    "status": "vp",
    "solvedCount": 6,
    "problemCount": 6,
@@ -2449,7 +2765,13 @@ window.EXTRA_CONTESTS = {
   {
    "contestId": 105385,
    "kind": "gym",
-   "name": "The 2024 CCPC Shandong Invitational Contest and Provincial",
+   "name": "The 2024 CCPC Shandong Invitational Contest and Provincial Collegiate Programming Contest",
+   "category": "invitational",
+   "categories": [
+    "invitational",
+    "provincial",
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 7,
    "problemCount": 7,
@@ -2491,6 +2813,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 105481,
    "kind": "gym",
    "name": "2024 CCPC Liaoning Provincial Contest",
+   "category": "provincial",
+   "categories": [
+    "provincial"
+   ],
    "status": "vp",
    "solvedCount": 7,
    "problemCount": 7,
@@ -2532,6 +2858,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 105887,
    "kind": "gym",
    "name": "第十三届重庆市大学生程序设计竞赛",
+   "category": "collegiate",
+   "categories": [
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 6,
    "problemCount": 6,
@@ -2569,6 +2899,11 @@ window.EXTRA_CONTESTS = {
    "contestId": 105891,
    "kind": "gym",
    "name": "The 13th Shaanxi Provincial Collegiate Programming Contest",
+   "category": "provincial",
+   "categories": [
+    "provincial",
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 8,
    "problemCount": 8,
@@ -2613,7 +2948,11 @@ window.EXTRA_CONTESTS = {
   {
    "contestId": 105901,
    "kind": "gym",
-   "name": "2025 ICPC Wuhan Invitational Contest (The 3rd Universal Cu",
+   "name": "2025 ICPC Wuhan Invitational Contest (The 3rd Universal Cup. Stage 37: Wuhan)",
+   "category": "invitational",
+   "categories": [
+    "invitational"
+   ],
    "status": "vp",
    "solvedCount": 4,
    "problemCount": 4,
@@ -2643,6 +2982,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 105909,
    "kind": "gym",
    "name": "The 9th Hebei Collegiate Programming Contest",
+   "category": "collegiate",
+   "categories": [
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 7,
    "problemCount": 7,
@@ -2683,7 +3026,13 @@ window.EXTRA_CONTESTS = {
   {
    "contestId": 105911,
    "kind": "gym",
-   "name": "2025 ICPC Nanchang Invitational and Jiangxi Provincial Col",
+   "name": "2025 ICPC Nanchang Invitational and Jiangxi Provincial Collegiate Programming Contest",
+   "category": "invitational",
+   "categories": [
+    "invitational",
+    "provincial",
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 7,
    "problemCount": 7,
@@ -2725,6 +3074,11 @@ window.EXTRA_CONTESTS = {
    "contestId": 105922,
    "kind": "gym",
    "name": "The 18th Jilin Provincial Collegiate Programming Contest",
+   "category": "provincial",
+   "categories": [
+    "provincial",
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 7,
    "problemCount": 7,
@@ -2765,7 +3119,12 @@ window.EXTRA_CONTESTS = {
   {
    "contestId": 105930,
    "kind": "gym",
-   "name": "The 15th Shandong CCPC Provincial Collegiate Programming C",
+   "name": "The 15th Shandong CCPC Provincial Collegiate Programming Contest",
+   "category": "provincial",
+   "categories": [
+    "provincial",
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 7,
    "problemCount": 7,
@@ -2806,7 +3165,13 @@ window.EXTRA_CONTESTS = {
   {
    "contestId": 105977,
    "kind": "gym",
-   "name": "2025 National Invitational of CCPC (Fujian), The 12th Fuji",
+   "name": "2025 National Invitational of CCPC (Fujian), The 12th Fujian Collegiate Programming Contest",
+   "category": "invitational",
+   "categories": [
+    "invitational",
+    "national",
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 9,
    "problemCount": 9,
@@ -2856,6 +3221,10 @@ window.EXTRA_CONTESTS = {
    "contestId": 106589,
    "kind": "gym",
    "name": "The 14th Chongqing Collegiate Programming Contest",
+   "category": "collegiate",
+   "categories": [
+    "collegiate"
+   ],
    "status": "vp",
    "solvedCount": 9,
    "problemCount": 9,
