@@ -269,7 +269,8 @@ var EXTRA = (window.EXTRA_CONTESTS && window.EXTRA_CONTESTS.contests) || [];
       // 用生成器判定好的类型，不再一律当成"区域赛"
       category: e.category || (e.kind === "round" ? "cf-round" : "gym-other"),
       categories: e.categories || [e.category || (e.kind === "round" ? "cf-round" : "gym-other")],
-      series: /CCPC/i.test(e.name) ? "CCPC" : "ICPC",
+      // 赛事体系按名字真实判定；CF 的 Round 既不是 ICPC 也不是 CCPC，就留空
+      series: e.series || (/CCPC/i.test(e.name) ? "CCPC" : (/ICPC/i.test(e.name) ? "ICPC" : null)),
       nameCn: null,
       nameEn: e.name || ("Codeforces " + e.contestId),
       siteRaw: e.name || String(e.contestId),
@@ -553,7 +554,11 @@ function applyFilters(){
       if(d2) return d2;
     }
     if(a.year !== b.year) return a.year - b.year;
-    if(a.series !== b.series) return a.series === "CCPC" ? -1 : 1;
+    // 排序：CCPC → ICPC → 无赛事归属（CF 的场次排最后）
+    var rank = {"CCPC":0, "ICPC":1};
+    var ra = rank[a.series] === undefined ? 2 : rank[a.series];
+    var rb = rank[b.series] === undefined ? 2 : rank[b.series];
+    if(ra !== rb) return ra - rb;
     return (a.nameEn || a.nameCn || "").localeCompare(b.nameEn || b.nameCn || "");
   });
   return out;
@@ -575,7 +580,9 @@ function render(){
     if(c.hasEditorial && c.solutionDir)
       linkHtml += '<a href="https://github.com/Wat-sons/XCPC-Solutions/blob/main/' + esc(c.solutionDir) + '/editorial.md" target="_blank" rel="noopener">外链题解</a>';
 
-    var tags = '<span class="tag ' + (c.series === "CCPC" ? "ccpc" : "icpc") + '">' + c.series + '</span>'
+    var tags = (c.series
+        ? '<span class="tag ' + (c.series === "CCPC" ? "ccpc" : "icpc") + '">' + c.series + '</span>'
+        : '')
       + catTagsHtml(c)
       + '<span class="tag">' + c.year + '</span>';
     var dv = divTag(c);

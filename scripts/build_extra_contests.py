@@ -100,6 +100,20 @@ def round_name(cid):
     return None
 
 
+def series_of(name):
+    """判断这场比赛属于哪个赛事体系。
+
+    CF 的 Round / Div 场不属于 ICPC 也不属于 CCPC —— 不能因为"不是 CCPC"就硬塞成 ICPC。
+    名字里没提 ICPC/CCPC 的，就返回 None（前端不显示赛事标签）。
+    """
+    n = name or ""
+    if re.search(r"CCPC", n, re.I):
+        return "CCPC"
+    if re.search(r"ICPC", n, re.I):
+        return "ICPC"
+    return None
+
+
 def classify(name, kind):
     """判断比赛类型，返回 (主类别, 全部适用标签)。
 
@@ -182,6 +196,7 @@ def main():
             "contestId": cid,
             "kind": kind,
             "name": name,
+            "series": series_of(name),
             "category": cat,
             "categories": cats,
             "status": v["status"],
